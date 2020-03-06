@@ -15,7 +15,6 @@
     "@angular/common": "~9.0.3",
     "@angular/compiler": "~9.0.3",
     "@angular/core": "~9.0.3",
-    "@angular/fire": "^5.4.1",
     "@angular/forms": "~9.0.3",
     "@angular/platform-browser": "~9.0.3",
     "@angular/platform-browser-dynamic": "~9.0.3",

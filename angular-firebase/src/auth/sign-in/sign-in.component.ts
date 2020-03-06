@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -9,18 +7,12 @@ import { AngularFireDatabase } from '@angular/fire/database';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-  db: AngularFirestore;
-  constructor(db: AngularFirestore) { this.db = db}
+  constructor(private authService: AuthService) {}
   ngOnInit(): void {
     const user = {
-      email: "Johny61@abv.bg", 
-      password: "John123"
+      email: 'test011@abv.bg',
+      password: 'John123'
     };
-    firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(() => {
-    }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    });
+    this.authService.signIn(user.email, user.password);
   }
 }
