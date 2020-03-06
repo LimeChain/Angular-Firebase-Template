@@ -14,14 +14,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://angular-firebase-templat-9d68a.firebaseio.com"
+  databaseURL: 'https://angular-firebase-templat-40a46.firebaseio.com',
 });
 app.get('/token', (req, res) => {
+    console.log(req.headers);
     req.headers.authorization = req.headers.authorization.replace('Bearer ', '');
+    console.log(req.headers)
     admin.auth().verifyIdToken(req.headers.authorization)
     .then(function(decodedToken) {
       let uid = decodedToken.uid;
-      res.send({uid});
+      // res.send({uid});
+      console.log(uid)
     }).catch(function(error) {
       console.log(error);
     });
