@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,8 +10,8 @@ export class SignInComponent implements OnInit {
   constructor(private authService: AuthService) {}
   ngOnInit(): void {
     const user = {
-      email: "test123@abv.bg", 
-      password: "John123"
+      email: 'test0@abv.bg',
+      password: 'John123'
     };
     this.authService.signIn(user.email, user.password);
   }
