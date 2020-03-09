@@ -10,8 +10,8 @@ export class SignInComponent implements OnInit {
   constructor(private authService: AuthService) {}
   ngOnInit(): void {
     const user = {
-      email: 'testtest@abv.bg',
-      password: 'John123'
+      email: 'test123123@abv.bg',
+      password: 'Johny12345'
     };
     this.authService.signIn(user.email, user.password);
   }

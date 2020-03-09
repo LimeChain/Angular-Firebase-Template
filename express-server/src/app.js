@@ -4,9 +4,9 @@ const app = express();
 const firebase = require('firebase');
 const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
-const serviceAccount = require('../src/config');
+const serviceAccount = require('../src/config/config.json');
 const originsWhitelist = 'http://localhost:4200'; 
-const appInit = require('../src/config')
+const appInit = require('../src/config/app-init.js')
 firebase.initializeApp(appInit);
 const corsOptions = {
   origin: function(origin, callback){
@@ -33,6 +33,9 @@ app.get('/token', async (req, res) => {
 })
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.put('/wallet', (req, res) => {
+  firebase.firestore().collection('users').doc(`${req.body.uid}`).update({wallet: req.body.wallet});
+})
 app.post('/wallet', (req, res) => {
   firebase.firestore().collection('users').doc(`${req.body.uid}`).set({
     email: req.body.email,

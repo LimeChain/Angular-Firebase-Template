@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-reset-password',
@@ -11,7 +10,6 @@ import * as firebase from 'firebase';
 export class ResetPasswordComponent implements OnInit {
   mode: string;
   actionCode: string;
-  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 
@@ -23,14 +21,19 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams
-      .subscribe(params => {
+      .subscribe(async (params) => {
         if (!params) {
           this.router.navigate(['/home']);
         }
         this.mode = params.mode;
         this.actionCode = params.oobCode;
         if (this.mode === 'resetPassword') {
-          this.authService.verifyPasswordResetCode(this.actionCode);
+          const email = await this.authService.verifyPasswordResetCode(this.actionCode);
+          if (email) {
+            this.newPassword = 'Johny12345';
+            this.confirmPassword = 'Johny12345';
+            this.authService.resetPassword(this.newPassword, this.confirmPassword, this.actionCode, email);
+          }
         } else {
           console.log('Query parameters are missing !');
         }
