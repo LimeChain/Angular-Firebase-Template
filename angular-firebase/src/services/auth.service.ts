@@ -13,12 +13,11 @@ export class AuthService {
     try {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
       this.token = await firebase.auth().currentUser.getIdToken();
-      this.http.get('http://localhost:3000/token').subscribe();
-      const result = await firebase.firestore().collection('users').doc(`${currentUser.user.uid}`).get();
-      if (result.data().wallet) {
-        const wallet = await ethers.Wallet.fromEncryptedJson(result.data().wallet, password);
+      await firebase.auth().sendPasswordResetEmail(email);
+      this.http.get('http://localhost:3000/token').subscribe(async (data: any) => {
+        const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
         console.log(wallet);
-      }
+      });
       return currentUser.user;
     } catch (e) {
       console.log(e);
