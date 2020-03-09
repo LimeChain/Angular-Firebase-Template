@@ -7,13 +7,14 @@ import * as firebase from 'firebase';
   providedIn: 'root'
 })
 export class AuthService {
-  private token;
+  private token: string;
+  private actionCodeChecked = false;
   constructor(private http: HttpClient) {}
   async signIn(email: string, password: string) {
     try {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
       this.token = await firebase.auth().currentUser.getIdToken();
-      await firebase.auth().sendPasswordResetEmail(email);
+      // await firebase.auth().sendPasswordResetEmail(email);
       this.http.get('http://localhost:3000/token').subscribe(async (data: any) => {
         const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
         console.log(wallet);
@@ -38,6 +39,16 @@ export class AuthService {
       console.log('Document successfully written!');
       console.log(currentUser.user);
       return currentUser.user;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async verifyPasswordResetCode(code: string) {
+    try {
+      const result = await firebase.auth().verifyPasswordResetCode(code);
+      if (result) {
+        this.actionCodeChecked = true;
+      }
     } catch (e) {
       console.log(e);
     }
