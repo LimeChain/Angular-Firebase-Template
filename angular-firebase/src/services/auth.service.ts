@@ -32,7 +32,6 @@ export class AuthService {
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
       this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
-      console.log('Document successfully written!');
       return currentUser.user;
     } catch (e) {
       console.log(e);

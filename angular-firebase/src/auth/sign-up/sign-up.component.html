@@ -1,19 +1,18 @@
 <div class="signUpForm">
-<div class='title'>
-        Sign Up
-</div>
-<div class="signUpFormWrapper">
-<form [formGroup]="signUpForm" >
-    <h5>Email</h5>
-<div class="input-container">
-<input formControlName="email" [(ngModel)]='this.email' type="text" placeholder="Enter email" >
-<h5>Password</h5>
-</div>
-<div class='input-container'>
-<input formControlName="password" [(ngModel)]='this.password' placeholder="Enter Password" >
-</div>
-<br>
-<button class='btn' type="submit" (click)='signUp()' [disabled]='!signUpForm.valid'>Sign Up</button>
+        <div class="title">
+                <h1>Sign Up</h1>
+        </div>
+<form [formGroup]="signUpForm">
+        <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input  type="email" formControlName='email' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]='this.email'>
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" formControlName='password' class="form-control" id="exampleInputPassword1" placeholder="Password" [(ngModel)]='this.password'>
+                <small id="emailHelp" class="form-text text-muted">Password must be between 5 and 30 characters.</small>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)='signUp()' [disabled]='!signUpForm.valid'>Submit</button>
 </form>
-</div>
 </div>
