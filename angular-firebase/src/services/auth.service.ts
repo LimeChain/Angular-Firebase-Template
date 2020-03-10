@@ -31,7 +31,6 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      // tslint:disable-next-line:max-line-length
       this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       console.log('Document successfully written!');
       return currentUser.user;
