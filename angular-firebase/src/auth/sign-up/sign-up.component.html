@@ -1,0 +1,19 @@
+<div class="signUpForm">
+<div class='title'>
+        Sign Up
+</div>
+<div class="signUpFormWrapper">
+<form [formGroup]="signUpForm" >
+    <h5>Email</h5>
+<div class="input-container">
+<input formControlName="email" [(ngModel)]='this.email' type="text" placeholder="Enter email" >
+<h5>Password</h5>
+</div>
+<div class='input-container'>
+<input formControlName="password" [(ngModel)]='this.password' placeholder="Enter Password" >
+</div>
+<br>
+<button class='btn' type="submit" (click)='signUp()' [disabled]='!signUpForm.valid'>Sign Up</button>
+</form>
+</div>
+</div>
