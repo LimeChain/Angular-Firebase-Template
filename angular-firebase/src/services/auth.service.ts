@@ -7,7 +7,7 @@ import * as firebase from 'firebase';
   providedIn: 'root'
 })
 export class AuthService {
-  private token;
+  private token: string;
   constructor(private http: HttpClient) {}
   async signIn(email: string, password: string) {
     try {
@@ -32,14 +32,33 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      // tslint:disable-next-line:max-line-length
       this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
-      // move into backend
       console.log('Document successfully written!');
-      console.log(currentUser.user);
       return currentUser.user;
     } catch (e) {
       console.log(e);
+    }
+  }
+  async verifyPasswordResetCode(code: string) {
+    try {
+      return await firebase.auth().verifyPasswordResetCode(code);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
+    if (newPassword !== confirmPassword) {
+      console.log('New Password and Confirm Password do not match');
+    }
+    try {
+      await firebase.auth().confirmPasswordReset(code, newPassword);
+      const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
+      const wallet = ethers.Wallet.createRandom();
+      const encryptPromise = await wallet.encrypt(newPassword);
+      this.http.put('http://localhost:3000/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+    } catch (error) {
+      console.log(error);
     }
   }
 }
