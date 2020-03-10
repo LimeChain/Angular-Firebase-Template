@@ -1,9 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const firebase = require('firebase');
+const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
-const serviceAccount = require('../config.json');
-const originsWhitelist = 'http://localhost:4200';
+const serviceAccount = require('../src/config');
+const originsWhitelist = 'http://localhost:4200'; 
+const appInit = require('../src/config')
+firebase.initializeApp(appInit);
 const corsOptions = {
   origin: function(origin, callback){
         const isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
@@ -16,19 +20,26 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://angular-firebase-templat-40a46.firebaseio.com',
 });
-app.get('/token', (req, res) => {
-    console.log(req.headers);
+app.get('/token', async (req, res) => {
     req.headers.authorization = req.headers.authorization.replace('Bearer ', '');
-    console.log(req.headers)
-    admin.auth().verifyIdToken(req.headers.authorization)
-    .then(function(decodedToken) {
-      let uid = decodedToken.uid;
-      // res.send({uid});
-      console.log(uid)
-    }).catch(function(error) {
-      console.log(error);
-    });
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(req.headers.authorization);
+      const uid = decodedToken.uid;
+      const result = await firebase.firestore().collection('users').doc(`${uid}`).get();
+      res.send({uid, wallet: result.data().wallet});
+    } catch(e) {
+      console.log(e);
+    }
 })
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.post('/wallet', (req, res) => {
+  firebase.firestore().collection('users').doc(`${req.body.uid}`).set({
+    email: req.body.email,
+    wallet: req.body.wallet
+  });
+})
+
 app.listen(3000, () => {
     console.log('Server is up on port 3000.');
 })
