@@ -1,13 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const firebase = require('firebase');
 const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
-const serviceAccount = require('../src/config/config.json');
-const originsWhitelist = 'http://localhost:4200'; 
-const appInit = require('../src/config/app-init.js')
-firebase.initializeApp(appInit);
+const originsWhitelist = 'http://localhost:4200';
+const fireBaseCred = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
+firebase.initializeApp(fireBaseCred);
 const corsOptions = {
   origin: function(origin, callback){
         const isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
