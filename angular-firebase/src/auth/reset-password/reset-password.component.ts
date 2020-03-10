@@ -35,7 +35,7 @@ export class ResetPasswordComponent implements OnInit {
             this.authService.resetPassword(this.newPassword, this.confirmPassword, this.actionCode, email);
           }
         } else {
-          console.log('Query parameters are missing !');
+          alert('Query parameters are missing !');
         }
     });
   }
