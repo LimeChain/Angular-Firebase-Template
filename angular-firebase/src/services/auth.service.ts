@@ -14,7 +14,7 @@ export class AuthService {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
       this.token = await firebase.auth().currentUser.getIdToken();
       await firebase.auth().sendPasswordResetEmail(email);
-      this.http.get('http://localhost:3000/token').subscribe(async (data: any) => {
+      this.http.get('http://localhost:3000/users/token').subscribe(async (data: any) => {
         const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
         console.log(wallet);
       });
@@ -32,7 +32,7 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
+      this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
       alert(e);
@@ -55,7 +55,7 @@ export class AuthService {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
-      this.http.put('http://localhost:3000/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      this.http.put('http://localhost:3000/users/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
     } catch (error) {
       alert(error);
     }
