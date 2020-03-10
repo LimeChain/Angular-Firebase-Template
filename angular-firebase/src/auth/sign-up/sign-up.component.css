@@ -22,3 +22,8 @@ form {
     font-family: initial;
     font-size: 43px;
 }
+
+.logIn {
+    margin-top: 15px;
+    float: right;
+}

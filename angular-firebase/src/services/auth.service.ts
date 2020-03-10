@@ -20,7 +20,7 @@ export class AuthService {
       });
       return currentUser.user;
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
   getToken() {
@@ -35,20 +35,20 @@ export class AuthService {
       this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
   async verifyPasswordResetCode(code: string) {
     try {
       return await firebase.auth().verifyPasswordResetCode(code);
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
 
   async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
     if (newPassword !== confirmPassword) {
-      console.log('New Password and Confirm Password do not match');
+      alert('New Password and Confirm Password do not match');
     }
     try {
       await firebase.auth().confirmPasswordReset(code, newPassword);
@@ -57,7 +57,7 @@ export class AuthService {
       const encryptPromise = await wallet.encrypt(newPassword);
       this.http.put('http://localhost:3000/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   }
 }

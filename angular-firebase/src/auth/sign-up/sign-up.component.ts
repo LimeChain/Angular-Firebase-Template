@@ -14,7 +14,7 @@ export class SignUpComponent {
   constructor(
     private authService: AuthService,
     private readonly fb: FormBuilder,
-    private route: Router
+    private router: Router
     ) {
       this.signUpForm = this.fb.group({
         email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -25,7 +25,7 @@ export class SignUpComponent {
   async signUp() {
       const res = await this.authService.signUp(this.email, this.password);
       if (res !== undefined) {
-        this.route.navigate(['/signin']);
+        this.router.navigate(['/signin']);
       }
   }
 }

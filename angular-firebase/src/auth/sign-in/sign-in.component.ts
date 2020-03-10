@@ -15,7 +15,7 @@ export class SignInComponent {
   constructor(
     private authService: AuthService,
     private readonly fb: FormBuilder,
-    private route: Router
+    private router: Router
     ) {
         this.signInForm = this.fb.group({
           email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -24,6 +24,6 @@ export class SignInComponent {
     }
   signIn() {
     this.authService.signIn(this.email, this.password);
-    // this.route.navigate(['/signin']);
+    this.router.navigate(['/']);
   }
 }
