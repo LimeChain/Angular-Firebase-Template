@@ -29,7 +29,7 @@ export class SignInComponent {
   async signIn() {
     const login = await this.authService.signIn(this.email, this.password);
     if (login === false) {
-      this.modalService.open(this.emailModal, { centered: true });
+      this.modalService.open(this.emailModal);
       this.router.navigate(['/signin']);
       return;
     }
