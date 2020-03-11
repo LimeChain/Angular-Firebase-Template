@@ -12,8 +12,10 @@ export class AuthService {
   async signIn(email: string, password: string) {
     try {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
+      if (!currentUser.user.emailVerified) {
+        return false;
+      }
       this.token = await firebase.auth().currentUser.getIdToken();
-      await firebase.auth().sendPasswordResetEmail(email);
       this.http.get('http://localhost:3000/users/token').subscribe(async (data: any) => {
         const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
         console.log(wallet);

@@ -11,6 +11,7 @@ import { TokenInterceptor } from '../interceptors/token-interceptor';
 import * as firebase from 'firebase';
 import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 firebase.initializeApp(environment.firebase);
 
 @NgModule({
@@ -27,6 +28,7 @@ firebase.initializeApp(environment.firebase);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule
   ],
   providers: [
     {
