@@ -12,15 +12,17 @@ export class AuthService {
   async signIn(email: string, password: string) {
     try {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
+      if (!currentUser.user.emailVerified) {
+        return false;
+      }
       this.token = await firebase.auth().currentUser.getIdToken();
-      await firebase.auth().sendPasswordResetEmail(email);
-      this.http.get('http://localhost:3000/token').subscribe(async (data: any) => {
+      this.http.get('http://localhost:3000/users/token').subscribe(async (data: any) => {
         const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
         console.log(wallet);
       });
       return currentUser.user;
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
   getToken() {
@@ -32,33 +34,32 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.http.post('http://localhost:3000/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
-      console.log('Document successfully written!');
+      this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
   async verifyPasswordResetCode(code: string) {
     try {
       return await firebase.auth().verifyPasswordResetCode(code);
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   }
 
   async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
     if (newPassword !== confirmPassword) {
-      console.log('New Password and Confirm Password do not match');
+      alert('New Password and Confirm Password do not match');
     }
     try {
       await firebase.auth().confirmPasswordReset(code, newPassword);
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
-      this.http.put('http://localhost:3000/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      this.http.put('http://localhost:3000/users/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   }
 }

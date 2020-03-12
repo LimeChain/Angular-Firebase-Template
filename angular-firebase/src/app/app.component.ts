@@ -7,7 +7,4 @@ import * as firebase from 'firebase';
 })
 export class AppComponent {
   title = 'angular-firebase';
-  async onButtonClick() {
-    await firebase.auth().sendPasswordResetEmail('test123123@abv.bg');
-  }
 }
