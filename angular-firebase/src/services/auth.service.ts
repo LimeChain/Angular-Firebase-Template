@@ -60,7 +60,7 @@ export class AuthService {
       this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
-      this.notificationService.error(e.error.message);
+      this.notificationService.error(e.message);
     }
   }
   async verifyPasswordResetCode(code: string) {

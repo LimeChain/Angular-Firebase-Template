@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -15,8 +14,7 @@ export class SignUpComponent {
   constructor(
     private authService: AuthService,
     private readonly fb: FormBuilder,
-    private router: Router,
-    private notificationService: NotificationService
+    private router: Router
     ) {
       this.signUpForm = this.fb.group({
         email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -25,11 +23,9 @@ export class SignUpComponent {
     }
 
   async signUp() {
-      try {
-        await this.authService.signUp(this.email, this.password);
+      const res = await this.authService.signUp(this.email, this.password);
+      if (res !== undefined) {
         this.router.navigate(['/signin']);
-      } catch (e) {
-        this.notificationService.error(e.error.message);
       }
   }
 }
