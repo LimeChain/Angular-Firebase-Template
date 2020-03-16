@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StorageService } from '../../services/storage.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,7 +21,7 @@ export class SignInComponent {
     private readonly fb: FormBuilder,
     private router: Router,
     private modalService: NgbModal,
-    private storageService: StorageService
+    private notificationService: NotificationService
     ) {
         this.signInForm = this.fb.group({
           email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -33,7 +34,8 @@ export class SignInComponent {
     if (checkEmailVerified) {
       (await this.authService.signIn()).subscribe(() => {
         // console.log(JSON.pthis.storageService.getItem('user'))
-        this.router.navigate(['/']);
+        this.notificationService.success('IOP');
+        this.router.navigate(['']);
       }, (e) => {
         alert(e.error.message);
       });

@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import * as firebase from 'firebase';
 import { StorageService } from './storage.service';
 import { tap } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,21 @@ export class AuthService {
   public loggedUserDataSubject$ = new BehaviorSubject<any>(
     this.getUserDataIfAuthenticated()
   );
-  public loggedUserData$(): Observable<any> {
+
+  public get loggedUserData$() {
     return this.loggedUserDataSubject$.asObservable();
   }
-  constructor(private http: HttpClient, private storageService: StorageService) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {
+    firebase.auth().onAuthStateChanged(async currentUser => {
+      if (currentUser) {
+        this.storageService.setItem('user', JSON.stringify(currentUser));
+        const user = (await firebase.firestore().collection('users').doc(`${currentUser.uid}`).get()).data();
+        this.loggedUserDataSubject$.next(user);
+        return;
+      }
+      this.storageService.removeItem('user');
+    });
+  }
 
   async checkUserEmailVerified(email: string, password: string) {
     try {
@@ -27,19 +38,13 @@ export class AuthService {
       alert('Invalid email or password !');
     }
   }
-
   getToken() {
     return this.token;
   }
   async signIn() {
       // console.log(await firebase.auth().currentUser);
       this.token = await firebase.auth().currentUser.getIdToken();
-      const email = firebase.auth().currentUser.email;
-      return this.http.get('http://localhost:3000/users/token').pipe(
-        tap(() => {
-          this.storageService.setItem('email', email);
-        })
-      );
+      return this.http.get('http://localhost:3000/users/token');
   }
   async signUp(email: string, password: string) {
     try {
@@ -75,8 +80,17 @@ export class AuthService {
       alert(error);
     }
   }
-
   async getUserDataIfAuthenticated() {
-    return this.storageService.getItem('email');
+    const loggedUser = JSON.parse(this.storageService.getItem('user'));
+    if (loggedUser) {
+      return (await firebase.firestore().collection('users').doc(`${loggedUser.uid}`).get()).data();
+    }
+    return null;
+  }
+
+  async logout() {
+    this.storageService.removeItem('user');
+    this.loggedUserDataSubject$.next(null);
+    await firebase.auth().signOut();
   }
 }
