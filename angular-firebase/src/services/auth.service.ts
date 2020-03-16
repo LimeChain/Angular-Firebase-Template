@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import { StorageService } from './storage.service';
 import { tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +19,19 @@ export class AuthService {
   public get loggedUserData$() {
     return this.loggedUserDataSubject$.asObservable();
   }
-  constructor(private http: HttpClient, private storageService: StorageService) {
-    firebase.auth().onAuthStateChanged(async currentUser => {
-      if (currentUser) {
-        this.storageService.setItem('user', JSON.stringify(currentUser));
-        const user = (await firebase.firestore().collection('users').doc(`${currentUser.uid}`).get()).data();
-        this.loggedUserDataSubject$.next(user);
-        return;
-      }
-      this.storageService.removeItem('user');
+  constructor(
+    private http: HttpClient,
+    private storageService: StorageService,
+    private notificationService: NotificationService
+    ) {
+      firebase.auth().onAuthStateChanged(async currentUser => {
+        if (currentUser) {
+          this.storageService.setItem('user', JSON.stringify(currentUser));
+          const user = (await firebase.firestore().collection('users').doc(`${currentUser.uid}`).get()).data();
+          this.loggedUserDataSubject$.next(user);
+          return;
+        }
+        this.storageService.removeItem('user');
     });
   }
 
@@ -35,7 +40,7 @@ export class AuthService {
         const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
         return currentUser.user.emailVerified ? true : false;
     } catch (e) {
-      alert('Invalid email or password !');
+      this.notificationService.error('Invalid email or password !');
     }
   }
   getToken() {
@@ -55,20 +60,20 @@ export class AuthService {
       this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
-      alert(e);
+      this.notificationService.error(e.error.message);
     }
   }
   async verifyPasswordResetCode(code: string) {
     try {
       return await firebase.auth().verifyPasswordResetCode(code);
     } catch (e) {
-      alert(e);
+      this.notificationService.error(e.error.message);
     }
   }
 
   async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
     if (newPassword !== confirmPassword) {
-      alert('New Password and Confirm Password do not match');
+      this.notificationService.error('New Password and Confirm Password do not match');
     }
     try {
       await firebase.auth().confirmPasswordReset(code, newPassword);
@@ -76,8 +81,8 @@ export class AuthService {
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
       this.http.put('http://localhost:3000/users/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
-    } catch (error) {
-      alert(error);
+    } catch (e) {
+      this.notificationService.error(e.error.message);
     }
   }
   async getUserDataIfAuthenticated() {

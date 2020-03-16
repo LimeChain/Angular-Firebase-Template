@@ -33,11 +33,10 @@ export class SignInComponent {
     const checkEmailVerified = await this.authService.checkUserEmailVerified(this.email, this.password);
     if (checkEmailVerified) {
       (await this.authService.signIn()).subscribe(() => {
-        // console.log(JSON.pthis.storageService.getItem('user'))
-        this.notificationService.success('IOP');
+        this.notificationService.success('Successfully logged!');
         this.router.navigate(['']);
       }, (e) => {
-        alert(e.error.message);
+        this.notificationService.error(e.error.message);
       });
     } else if (checkEmailVerified === false) {
       this.modalService.open(this.emailModal);
