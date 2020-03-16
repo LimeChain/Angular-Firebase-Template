@@ -4,9 +4,14 @@ import { SignUpComponent } from 'src/auth/sign-up/sign-up.component';
 import { SignInComponent } from 'src/auth/sign-in/sign-in.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
 import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
+import { HomeComponent } from '../home/home.component';
 
 
 const routes: Routes = [
+  { path: '',
+  component: HomeComponent,
+  pathMatch: 'full'
+  },
   { path: 'signup',
     component: SignUpComponent,
     pathMatch: 'full'

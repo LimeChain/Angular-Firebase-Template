@@ -2,31 +2,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ethers } from 'ethers';
 import * as firebase from 'firebase';
+import { StorageService } from './storage.service';
+import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private token: string;
-  constructor(private http: HttpClient) {}
-  async signIn(email: string, password: string) {
+  public loggedUserDataSubject$ = new BehaviorSubject<any>(
+    this.getUserDataIfAuthenticated()
+  );
+  public loggedUserData$(): Observable<any> {
+    return this.loggedUserDataSubject$.asObservable();
+  }
+  constructor(private http: HttpClient, private storageService: StorageService) {}
+
+  async checkUserEmailVerified(email: string, password: string) {
     try {
-      const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
-      if (!currentUser.user.emailVerified) {
-        return false;
-      }
-      this.token = await firebase.auth().currentUser.getIdToken();
-      this.http.get('http://localhost:3000/users/token').subscribe(async (data: any) => {
-        const wallet = await ethers.Wallet.fromEncryptedJson(data.wallet, password);
-        console.log(wallet);
-      });
-      return currentUser.user;
+        const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
+        return currentUser.user.emailVerified ? true : false;
     } catch (e) {
-      alert(e);
+      alert('Invalid email or password !');
     }
   }
+
   getToken() {
     return this.token;
+  }
+  async signIn() {
+      // console.log(await firebase.auth().currentUser);
+      this.token = await firebase.auth().currentUser.getIdToken();
+      const email = firebase.auth().currentUser.email;
+      return this.http.get('http://localhost:3000/users/token').pipe(
+        tap(() => {
+          this.storageService.setItem('email', email);
+        })
+      );
   }
   async signUp(email: string, password: string) {
     try {
@@ -61,5 +74,9 @@ export class AuthService {
     } catch (error) {
       alert(error);
     }
+  }
+
+  async getUserDataIfAuthenticated() {
+    return this.storageService.getItem('email');
   }
 }

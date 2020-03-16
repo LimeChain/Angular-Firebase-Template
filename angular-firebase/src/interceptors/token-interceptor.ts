@@ -4,10 +4,11 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { StorageService } from '../services/storage.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-    public constructor(private readonly authService: AuthService) {}
+    public constructor(private readonly authService: AuthService, private storageService: StorageService) {}
 
     public intercept(
       request: HttpRequest<any>,
@@ -19,5 +20,5 @@ export class TokenInterceptor implements HttpInterceptor {
           headers: request.headers.set('Authorization', `Bearer ${token}`)
                 });
         return next.handle(updatedRequest);
-}
+  }
 }

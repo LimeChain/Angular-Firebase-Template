@@ -19,15 +19,9 @@ class FirebaseOperations {
         firebase.firestore().collection(`${collection}`).doc(`${doc}`).update(dto);
     }
 
-    static async login(token) {
-        try {
-            const decodedToken = await admin.auth().verifyIdToken(token);
-            const uid = decodedToken.uid;
-            const result = await firebase.firestore().collection('users').doc(`${uid}`).get();
-            return {uid, wallet: result.data().wallet};
-          } catch(e) {
-            console.log(e);
-          }
+    static async verifyToken(token) {
+          const decodedToken = await admin.auth().verifyIdToken(token);
+          return {decodedToken};
     }
 }
 

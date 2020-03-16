@@ -4,8 +4,15 @@ var express = require('express');
 var router = express.Router();
 router.get('/token', async (req, res, next) => {
     const token = req.headers.authorization.replace('Bearer ', '');
-    const response = await FirebaseOperations.login(token);
-    res.send(response);
+    try {
+      const response = await FirebaseOperations.verifyToken(token);
+      res.send(response);
+    }
+    catch(e) {
+      res.status(400).send({
+        message: 'Invalid Token!'
+      })
+    }
 })
 router.put('/wallet', (req, res) => {
     const dto = {
