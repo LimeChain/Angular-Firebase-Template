@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import { StorageService } from './storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { NotificationService } from './notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,7 +38,7 @@ export class AuthService {
         const currentUser = await firebase.auth().signInWithEmailAndPassword(email, password);
         return currentUser.user.emailVerified ? true : false;
     } catch (e) {
-      this.notificationService.error('Invalid email or password !');
+      throw new Error(e);
     }
   }
   signIn() {

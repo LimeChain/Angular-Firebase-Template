@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StorageService } from '../../services/storage.service';
 import { NotificationService } from '../../services/notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-sign-in',
@@ -21,7 +22,8 @@ export class SignInComponent {
     private readonly fb: FormBuilder,
     private router: Router,
     private modalService: NgbModal,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private spinner: NgxSpinnerService
     ) {
         this.signInForm = this.fb.group({
           email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -30,18 +32,27 @@ export class SignInComponent {
     }
 
   async signIn() {
-    const checkEmailVerified = await this.authService.checkUserEmailVerified(this.email, this.password);
-    if (checkEmailVerified) {
-      this.authService.signIn().subscribe((d) => {
-        console.log(d);
-        this.notificationService.success('Successfully logged!');
-        this.router.navigate(['']);
-      }, (e) => {
-        this.notificationService.error(e.error.message);
-      });
-    } else if (checkEmailVerified === false) {
-      this.modalService.open(this.emailModal);
-      this.router.navigate(['/signin']);
+    try {
+      this.spinner.show();
+      const checkEmailVerified = await this.authService.checkUserEmailVerified(this.email, this.password);
+      if (checkEmailVerified) {
+        this.authService.signIn().subscribe((data) => {
+          console.log(data);
+          this.spinner.hide();
+          this.notificationService.success('Successfully logged!');
+          this.router.navigate(['']);
+        }, (e) => {
+          this.spinner.hide();
+          this.notificationService.error(e.error.message);
+        });
+      } else if (checkEmailVerified === false) {
+        this.spinner.hide();
+        this.modalService.open(this.emailModal);
+        this.router.navigate(['/signin']);
+      }
+    } catch (e) {
+      this.spinner.hide();
+      this.notificationService.error(e.message);
     }
-  }
+    }
 }

@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from '../home/home.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 firebase.initializeApp(environment.firebase);
 
@@ -37,6 +38,7 @@ firebase.initializeApp(environment.firebase);
     NgbModule,
     CommonModule,
     BrowserAnimationsModule,
+    NgxSpinnerModule,
     ToastrModule.forRoot()
   ],
   providers: [
@@ -45,6 +47,7 @@ firebase.initializeApp(environment.firebase);
       useClass: TokenInterceptor,
       multi: true
     }
+    ,
   ],
   bootstrap: [AppComponent]
 })
