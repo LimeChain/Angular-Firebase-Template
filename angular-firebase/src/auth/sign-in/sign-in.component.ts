@@ -32,7 +32,8 @@ export class SignInComponent {
   async signIn() {
     const checkEmailVerified = await this.authService.checkUserEmailVerified(this.email, this.password);
     if (checkEmailVerified) {
-      (await this.authService.signIn()).subscribe(() => {
+      this.authService.signIn().subscribe((d) => {
+        console.log(d);
         this.notificationService.success('Successfully logged!');
         this.router.navigate(['']);
       }, (e) => {

@@ -2,17 +2,9 @@ const FirebaseOperations = require('../firebase/firebase');
 const collections = require('../collections/collections.json');
 var express = require('express');
 var router = express.Router();
-router.get('/token', async (req, res, next) => {
-    const token = req.headers.authorization.replace('Bearer ', '');
-    try {
-      const response = await FirebaseOperations.verifyToken(token);
-      res.send(response);
-    }
-    catch(e) {
-      res.status(400).send({
-        message: 'Invalid Token!'
-      })
-    }
+router.get('/wallet', async (req, res) => {
+  const data = await FirebaseOperations.retrieve(collections.USERS_COLLECTION, req.headers.uid.uid);
+  res.send(data.data());
 })
 router.put('/wallet', (req, res) => {
     const dto = {
