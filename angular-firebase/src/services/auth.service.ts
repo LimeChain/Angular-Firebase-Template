@@ -3,10 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ethers } from 'ethers';
 import * as firebase from 'firebase';
 import { StorageService } from './storage.service';
-import { tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { NotificationService } from './notification.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -47,7 +45,6 @@ export class AuthService {
     return this.token;
   }
   async signIn() {
-      // console.log(await firebase.auth().currentUser);
       this.token = await firebase.auth().currentUser.getIdToken();
       return this.http.get('http://localhost:3000/users/token');
   }
@@ -60,7 +57,7 @@ export class AuthService {
       this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
       return currentUser.user;
     } catch (e) {
-      this.notificationService.error(e.message);
+      throw new Error(e);
     }
   }
   async verifyPasswordResetCode(code: string) {
