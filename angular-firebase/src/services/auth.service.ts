@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import { StorageService } from './storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { NotificationService } from './notification.service';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,7 +42,7 @@ export class AuthService {
     }
   }
   signIn() {
-      return this.http.get('http://localhost:3000/users/wallet');
+      return this.http.get(`${environment}/users/wallet`);
   }
   async signUp(email: string, password: string) {
     try {
@@ -49,7 +50,7 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
+      this.http.post(`${environment}/users/wallet`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
     } catch (e) {
       throw new Error(e);
     }
@@ -71,7 +72,7 @@ export class AuthService {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
-      this.http.put('http://localhost:3000/users/wallet', {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      this.http.put(`${environment}/users/wallet`, {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
     } catch (e) {
       this.notificationService.error(e.error.message);
     }
