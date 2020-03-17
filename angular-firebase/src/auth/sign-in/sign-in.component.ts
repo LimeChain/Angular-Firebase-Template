@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { StorageService } from '../../services/storage.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -18,7 +20,8 @@ export class SignInComponent {
     private authService: AuthService,
     private readonly fb: FormBuilder,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private notificationService: NotificationService
     ) {
         this.signInForm = this.fb.group({
           email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -27,12 +30,17 @@ export class SignInComponent {
     }
 
   async signIn() {
-    const login = await this.authService.signIn(this.email, this.password);
-    if (login === false) {
+    const checkEmailVerified = await this.authService.checkUserEmailVerified(this.email, this.password);
+    if (checkEmailVerified) {
+      (await this.authService.signIn()).subscribe(() => {
+        this.notificationService.success('Successfully logged!');
+        this.router.navigate(['']);
+      }, (e) => {
+        this.notificationService.error(e.error.message);
+      });
+    } else if (checkEmailVerified === false) {
       this.modalService.open(this.emailModal);
       this.router.navigate(['/signin']);
-      return;
     }
-    this.router.navigate(['/']);
   }
 }

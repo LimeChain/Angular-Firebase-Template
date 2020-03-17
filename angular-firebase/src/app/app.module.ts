@@ -12,6 +12,11 @@ import * as firebase from 'firebase';
 import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { HomeComponent } from '../home/home.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 firebase.initializeApp(environment.firebase);
 
 @NgModule({
@@ -20,7 +25,8 @@ firebase.initializeApp(environment.firebase);
     SignUpComponent,
     SignInComponent,
     ResetPasswordEmailComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +34,10 @@ firebase.initializeApp(environment.firebase);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     {
