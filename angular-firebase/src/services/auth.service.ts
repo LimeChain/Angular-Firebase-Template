@@ -9,7 +9,6 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private token: string;
   public loggedUserDataSubject$ = new BehaviorSubject<any>(
     this.getUserDataIfAuthenticated()
   );
@@ -23,7 +22,7 @@ export class AuthService {
     private notificationService: NotificationService
     ) {
       firebase.auth().onAuthStateChanged(async currentUser => {
-        if (currentUser) {
+        if (currentUser && currentUser.emailVerified) {
           this.storageService.setItem('user', JSON.stringify(currentUser));
           const user = (await firebase.firestore().collection('users').doc(`${currentUser.uid}`).get()).data();
           this.loggedUserDataSubject$.next(user);
@@ -41,12 +40,8 @@ export class AuthService {
       this.notificationService.error('Invalid email or password !');
     }
   }
-  getToken() {
-    return this.token;
-  }
-  async signIn() {
-      this.token = await firebase.auth().currentUser.getIdToken();
-      return this.http.get('http://localhost:3000/users/token');
+  signIn() {
+      return this.http.get('http://localhost:3000/users/wallet');
   }
   async signUp(email: string, password: string) {
     try {
@@ -55,7 +50,6 @@ export class AuthService {
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
       this.http.post('http://localhost:3000/users/wallet', {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
-      return currentUser.user;
     } catch (e) {
       throw new Error(e);
     }

@@ -10,6 +10,9 @@ admin.initializeApp({
   });
 
 class FirebaseOperations {
+    static async retrieve(collection, doc) {
+        return await firebase.firestore().collection(`${collection}`).doc(`${doc}`).get();
+    }
 
     static create(collection, doc, dto) {
         firebase.firestore().collection(`${collection}`).doc(`${doc}`).set(dto);
