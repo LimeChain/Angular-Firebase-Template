@@ -43,7 +43,7 @@ export class AuthService {
     }
   }
   signIn() {
-      return this.api.get(`${environment}/users/wallet`);
+      return this.api.get(`${environment.domain}/users/wallet`);
   }
   async signUp(email: string, password: string) {
     try {
@@ -51,7 +51,7 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.api.post(`${environment}/users/wallet`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
+      this.api.post(`${environment.domain}/users/wallet`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
     } catch (e) {
       throw new Error(e);
     }
@@ -73,7 +73,7 @@ export class AuthService {
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
-      this.api.put(`${environment}/users/wallet`, {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      this.api.put(`${environment.domain}/users/createUser`, {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
     } catch (e) {
       this.notificationService.error(e.error.message);
     }
