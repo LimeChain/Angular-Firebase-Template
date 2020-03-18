@@ -67,9 +67,6 @@ export class AuthService {
   }
 
   async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
-    if (newPassword !== confirmPassword) {
-      this.notificationService.error('New Password and Confirm Password do not match');
-    }
     try {
       await firebase.auth().confirmPasswordReset(code, newPassword);
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);

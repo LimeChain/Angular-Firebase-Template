@@ -42,6 +42,10 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
   async resetPasswordButton() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.notificationService.error('New Password and Confirm Password do not match');
+      return;
+    }
     const email = await this.authService.verifyPasswordResetCode(this.actionCode);
     await this.authService.resetPassword(this.newPassword, this.confirmPassword, this.actionCode, email);
     this.notificationService.success('Your password was changed !');
