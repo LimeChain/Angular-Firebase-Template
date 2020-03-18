@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-    constructor(private readonly toastr: ToastrService) {}
+  constructor(private readonly toastr: ToastService) {}
 
-  public success(message: string, title?: string): void {
-    this.toastr.success(message, title);
+  public success(message: string): void {
+    this.toastr.show(message, {
+      classname: 'bg-success text-light',
+      delay: 3000 ,
+      autohide: true,
+    });
   }
 
-  public error(message: string, title?: string): void {
-    this.toastr.error(message, title);
+  public error(message: string): void {
+    this.toastr.show(message, {
+      classname: 'bg-danger text-light',
+      delay: 3000 ,
+      autohide: true,
+    });
   }
 
-  public warning(message: string, title?: string): void {
-    this.toastr.warning(message, title);
-  }
-
-  public info(message: string, title?: string): void {
-    this.toastr.info(message, title);
-  }
 }
