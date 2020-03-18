@@ -2,7 +2,7 @@
     <div class="title">
             <h1>Sign In</h1>
     </div>
-<form [formGroup]="signInForm">
+        <form [formGroup]="signInForm" class="form">
     <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input  type="email" formControlName='email' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]='this.email'>
@@ -13,6 +13,20 @@
     </div>
     <a class='forgottenPass' href="http://localhost:4200/forgotPassword">Forgot password?</a>
     <a class='createAnAcc' href="http://localhost:4200/signup">Create an account</a>
-    <button type="submit" class="btn btn-primary" (click)='signIn()' [disabled]='!signInForm.valid'>Submit</button>
-</form>
+    <button class='submitBtn' type="submit" class="btn btn-primary" (click)='signIn()' [disabled]='!signInForm.valid'>Submit</button>
+        </form>
 </div>
+<ng-template #emailModal let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">Hi {{this.email}}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>If you want to log in you have to verify your email first!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+        </div>
+</ng-template>

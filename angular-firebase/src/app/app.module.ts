@@ -11,6 +11,12 @@ import { TokenInterceptor } from '../interceptors/token-interceptor';
 import * as firebase from 'firebase';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomeComponent } from '../home/home.component';
+
 firebase.initializeApp(environment.firebase);
 
 @NgModule({
@@ -19,7 +25,8 @@ firebase.initializeApp(environment.firebase);
     SignUpComponent,
     SignInComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +34,10 @@ firebase.initializeApp(environment.firebase);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     {
