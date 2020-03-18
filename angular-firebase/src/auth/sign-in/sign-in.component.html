@@ -11,7 +11,7 @@
             <label for="exampleInputPassword1">Password</label>
             <input type="password" formControlName='password' class="form-control" id="exampleInputPassword1" placeholder="Password" [(ngModel)]='this.password'>
     </div>
-    <a class='forgottenPass' href="http://localhost:4200/resetPasswordEmail">Forgot password?</a>
+    <a class='forgottenPass' href="http://localhost:4200/forgotPassword">Forgot password?</a>
     <a class='createAnAcc' href="http://localhost:4200/signup">Create an account</a>
     <button type="submit" class="btn btn-primary" (click)='signIn()' [disabled]='!signInForm.valid'>Submit</button>
 </form>

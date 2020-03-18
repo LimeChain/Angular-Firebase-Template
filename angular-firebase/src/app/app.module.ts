@@ -9,8 +9,8 @@ import { SignInComponent } from 'src/auth/sign-in/sign-in.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../interceptors/token-interceptor';
 import * as firebase from 'firebase';
-import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
 firebase.initializeApp(environment.firebase);
 
 @NgModule({
@@ -18,7 +18,7 @@ firebase.initializeApp(environment.firebase);
     AppComponent,
     SignUpComponent,
     SignInComponent,
-    ResetPasswordEmailComponent,
+    ForgotPasswordComponent,
     ResetPasswordComponent
   ],
   imports: [

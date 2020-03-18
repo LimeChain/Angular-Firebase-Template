@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+
 @Component({
-  selector: 'app-reset-password-email',
-  templateUrl: './reset-password-email.component.html',
-  styleUrls: ['./reset-password-email.component.css']
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.css']
 })
-export class ResetPasswordEmailComponent {
+export class ForgotPasswordComponent {
+
   public sentEmailForm: FormGroup;
   public email: string;
   constructor(
@@ -24,4 +26,5 @@ export class ResetPasswordEmailComponent {
      alert('Email was sent !');
      this.route.navigate(['/signin']);
    }
+
 }

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SignUpComponent } from 'src/auth/sign-up/sign-up.component';
 import { SignInComponent } from 'src/auth/sign-in/sign-in.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
-import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
+import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
 
 
 const routes: Routes = [
@@ -21,8 +21,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'resetPasswordEmail',
-    component: ResetPasswordEmailComponent,
+    path: 'forgotPassword',
+    component: ForgotPasswordComponent,
     pathMatch: 'full'
   }
 ];
