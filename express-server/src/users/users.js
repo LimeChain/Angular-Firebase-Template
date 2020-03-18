@@ -12,7 +12,7 @@ router.put('/wallet', (req, res) => {
     }
     FirebaseOperations.update(collections.USERS_COLLECTION, req.body.uid, dto)
   })
-router.post('/wallet', (req, res) => {
+router.post('/createUser', (req, res) => {
     const dto = {
       email: req.body.email,
       wallet: req.body.wallet
