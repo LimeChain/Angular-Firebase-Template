@@ -53,7 +53,9 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
+      this.storageService.setItem('user', JSON.stringify(currentUser.user));
       this.api.post(`${environment.apiUrl}/users/wallet`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
+      this.storageService.removeItem('user');
     } catch (e) {
       throw new Error(e);
     }
