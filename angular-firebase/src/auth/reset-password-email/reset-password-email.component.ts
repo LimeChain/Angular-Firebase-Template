@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-reset-password-email',
   templateUrl: './reset-password-email.component.html',

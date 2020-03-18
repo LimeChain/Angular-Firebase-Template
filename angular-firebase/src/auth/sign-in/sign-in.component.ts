@@ -3,7 +3,6 @@ import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StorageService } from '../../services/storage.service';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
@@ -35,7 +34,7 @@ export class SignInComponent {
       this.authService.signIn().subscribe((d) => {
         console.log(d);
         this.notificationService.success('Successfully logged!');
-        this.router.navigate(['']);
+        this.router.navigate(['home']);
       }, (e) => {
         this.notificationService.error(e.error.message);
       });

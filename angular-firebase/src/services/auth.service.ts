@@ -91,4 +91,13 @@ export class AuthService {
     this.loggedUserDataSubject$.next(null);
     await firebase.auth().signOut();
   }
+
+  async verifyEmail(actCode: string) {
+    try {
+      await firebase.auth().applyActionCode(actCode);
+      this.logout();
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
 }

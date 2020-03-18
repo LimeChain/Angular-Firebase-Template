@@ -34,6 +34,10 @@ export class ResetPasswordComponent implements OnInit {
         }
         this.mode = params.mode;
         this.actionCode = params.oobCode;
+        if (this.mode === 'verifyEmail') {
+          this.router.navigate(['verifyEmail'], { queryParams: { oobCode: this.actionCode } });
+          return;
+        }
         if (this.mode !== 'resetPassword') {
           alert('Query parameters are missing !');
         }

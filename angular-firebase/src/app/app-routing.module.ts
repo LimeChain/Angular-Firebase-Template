@@ -7,10 +7,16 @@ import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-
 import { HomeComponent } from '../home/home.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { LoggedGuardGuard } from '../guards/logged-guard.guard';
+import { VerifyEmailComponent } from '../auth/verify-email/verify-email.component';
 
 
 const routes: Routes = [
-  { path: '',
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  { path: 'home',
   component: HomeComponent,
   pathMatch: 'full',
   canActivate: [AuthGuard]
@@ -33,6 +39,11 @@ const routes: Routes = [
   {
     path: 'resetPasswordEmail',
     component: ResetPasswordEmailComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'verifyEmail',
+    component: VerifyEmailComponent,
     pathMatch: 'full'
   }
 ];

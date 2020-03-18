@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from '../home/home.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VerifyEmailComponent } from '../auth/verify-email/verify-email.component';
 
 firebase.initializeApp(environment.firebase);
 
@@ -26,6 +27,7 @@ firebase.initializeApp(environment.firebase);
     SignInComponent,
     ResetPasswordEmailComponent,
     ResetPasswordComponent,
+    VerifyEmailComponent,
     HomeComponent
   ],
   imports: [
