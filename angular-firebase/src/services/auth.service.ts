@@ -42,9 +42,11 @@ export class AuthService {
       this.notificationService.error('Invalid email or password !');
     }
   }
+
   signIn() {
       return this.api.get(`${environment.apiUrl}/users/wallet`);
   }
+
   async signUp(email: string, password: string) {
     try {
       const currentUser = await firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -90,5 +92,9 @@ export class AuthService {
     this.storageService.removeItem('user');
     this.loggedUserDataSubject$.next(null);
     await firebase.auth().signOut();
+  }
+
+  async sentResetPasswordEmail(email: string) {
+    await firebase.auth().sendPasswordResetEmail(email);
   }
 }
