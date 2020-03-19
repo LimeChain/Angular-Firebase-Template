@@ -11,11 +11,6 @@ import { VerifyEmailComponent } from '../auth/verify-email/verify-email.componen
 
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
   { path: 'home',
   component: HomeComponent,
   pathMatch: 'full',

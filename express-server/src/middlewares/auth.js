@@ -1,7 +1,6 @@
 const FirebaseOperations = require('../firebase/firebase');
 
 module.exports = async(req, res, next) => {
-    console.log(req.headers);
     const token = req.headers.authorization.replace('Bearer ', '');
         if (req.path === '/users/createUser' && req.method === 'POST') {
             next();
