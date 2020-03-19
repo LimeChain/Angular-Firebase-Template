@@ -34,7 +34,7 @@ export class SignInComponent {
       this.authService.signIn().subscribe((d) => {
         console.log(d);
         this.notificationService.success('Successfully logged!');
-        this.router.navigate(['home']);
+        this.router.navigate(['']);
       }, (e) => {
         this.notificationService.error(e.error.message);
       });

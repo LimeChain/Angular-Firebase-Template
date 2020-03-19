@@ -74,8 +74,9 @@ export class AuthService {
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
       this.api.put(`${environment.apiUrl}/users/wallet`, {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      await this.logout();
     } catch (e) {
-      this.notificationService.error(e.error.message);
+      this.notificationService.error(e.message);
     }
   }
   async getUserDataIfAuthenticated() {

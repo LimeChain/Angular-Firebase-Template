@@ -10,7 +10,7 @@ export class AppComponent {
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     this.activatedRoute.queryParams.subscribe((params) => {
       if (!params) {
-                      this.router.navigate(['/home']);
+                      this.router.navigate(['']);
                     }
       const mode = params.mode;
       const actionCode = params.oobCode;

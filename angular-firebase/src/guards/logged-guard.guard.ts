@@ -16,7 +16,7 @@ export class LoggedGuardGuard implements CanActivate {
       const user = this.storageService.getItem('user');
       if (user) {
         alert('You are already logged in!');
-        this.router.navigate(['home']);
+        this.router.navigate(['']);
         return false;
       }
       return true;
