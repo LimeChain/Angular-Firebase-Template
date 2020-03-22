@@ -51,7 +51,7 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.api.post(`${environment.apiUrl}/users/wallet`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
+      this.api.post(`${environment.apiUrl}/users/createUser`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
     } catch (e) {
       throw new Error(e);
     }
@@ -74,8 +74,9 @@ export class AuthService {
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(newPassword);
       this.api.put(`${environment.apiUrl}/users/wallet`, {uid: currentUser.user.uid, wallet: encryptPromise}).subscribe();
+      await this.logout();
     } catch (e) {
-      this.notificationService.error(e.error.message);
+      this.notificationService.error(e.message);
     }
   }
   async getUserDataIfAuthenticated() {
@@ -90,5 +91,14 @@ export class AuthService {
     this.storageService.removeItem('user');
     this.loggedUserDataSubject$.next(null);
     await firebase.auth().signOut();
+  }
+
+  async verifyEmail(actCode: string) {
+    try {
+      await firebase.auth().applyActionCode(actCode);
+      this.logout();
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }

@@ -22,7 +22,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loggedUserSubscription = this.authService.loggedUserData$.subscribe(async (data) => this.loggedUser = await data);
   }
   ngOnDestroy(): void {
-    this.loggedUserSubscription.unsubscribe();
+    if (this.loggedUserSubscription) {
+      this.loggedUserSubscription.unsubscribe();
+    }
   }
 
   logout() {
