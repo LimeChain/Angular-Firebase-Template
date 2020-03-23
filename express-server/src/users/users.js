@@ -12,11 +12,12 @@ router.put('/wallet', (req, res) => {
     }
     FirebaseOperations.update(collections.USERS_COLLECTION, req.body.uid, dto)
   })
-router.post('/createUser', (req, res) => {
+router.post('/createUser', async (req, res) => {
     const dto = {
       email: req.body.email,
       wallet: req.body.wallet
     }
-    FirebaseOperations.create(collections.USERS_COLLECTION, req.body.uid, dto);
+    const user = await FirebaseOperations.create(collections.USERS_COLLECTION, req.body.uid, dto);
+    res.send({user: user})
 })
 module.exports.router = router;

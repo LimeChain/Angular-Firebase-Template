@@ -13,9 +13,14 @@ import { VerifyEmailComponent } from '../auth/verify-email/verify-email.componen
 const routes: Routes = [
   {
   path: '',
-  component: HomeComponent,
   pathMatch: 'full',
-  canActivate: [AuthGuard]
+  redirectTo: '/home'
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
   },
   { path: 'signup',
     component: SignUpComponent,

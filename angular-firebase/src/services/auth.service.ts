@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ethers } from 'ethers';
 import * as firebase from 'firebase';
@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { NotificationService } from './notification.service';
 import { environment } from '../environments/environment';
 import { Api } from './api.service';
+import { switchMap, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,8 @@ export class AuthService {
     private api: Api
     ) {
       firebase.auth().onAuthStateChanged(async currentUser => {
-        if (currentUser && currentUser.emailVerified) {
+        if (currentUser) {
+          console.log(currentUser);
           this.storageService.setItem('user', JSON.stringify(currentUser));
           const user = (await firebase.firestore().collection('users').doc(`${currentUser.uid}`).get()).data();
           this.loggedUserDataSubject$.next(user);
@@ -53,9 +55,10 @@ export class AuthService {
       await currentUser.user.sendEmailVerification();
       const wallet = ethers.Wallet.createRandom();
       const encryptPromise = await wallet.encrypt(password);
-      this.storageService.setItem('user', JSON.stringify(currentUser.user));
-      this.api.post(`${environment.apiUrl}/users/createUser`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).subscribe();
-      this.storageService.removeItem('user');
+      return this.api.post(`${environment.apiUrl}/users/createUser`, {wallet: encryptPromise, uid: currentUser.user.uid, email}).pipe(tap((user: any) => {
+        this.storageService.setItem('user', JSON.stringify(currentUser.user));
+        this.loggedUserDataSubject$.next(user.user);
+      }));
     } catch (e) {
       throw new Error(e);
     }
@@ -68,7 +71,7 @@ export class AuthService {
     }
   }
 
-  async resetPassword(newPassword: string, confirmPassword: string, code: string, email: string) {
+  async resetPassword(newPassword: string, code: string, email: string) {
     try {
       await firebase.auth().confirmPasswordReset(code, newPassword);
       const currentUser = await firebase.auth().signInWithEmailAndPassword(email, newPassword);
