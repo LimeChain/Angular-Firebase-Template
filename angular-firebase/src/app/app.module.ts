@@ -14,8 +14,10 @@ import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from '../home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VerifyEmailComponent } from '../auth/verify-email/verify-email.component';
+import { ToastComponent } from '../toast/toast.component';
 
 firebase.initializeApp(environment.firebase);
 
@@ -26,7 +28,9 @@ firebase.initializeApp(environment.firebase);
     SignInComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    HomeComponent
+    VerifyEmailComponent,
+    HomeComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,6 @@ firebase.initializeApp(environment.firebase);
     NgbModule,
     CommonModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
   ],
   providers: [
     {
