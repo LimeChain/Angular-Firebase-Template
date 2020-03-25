@@ -9,10 +9,11 @@ import { SignInComponent } from 'src/auth/sign-in/sign-in.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../interceptors/token-interceptor';
 import * as firebase from 'firebase';
-import { ResetPasswordEmailComponent } from '../auth/reset-password-email/reset-password-email.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 import { HomeComponent } from '../home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VerifyEmailComponent } from '../auth/verify-email/verify-email.component';
@@ -25,7 +26,7 @@ firebase.initializeApp(environment.firebase);
     AppComponent,
     SignUpComponent,
     SignInComponent,
-    ResetPasswordEmailComponent,
+    ForgotPasswordComponent,
     ResetPasswordComponent,
     VerifyEmailComponent,
     HomeComponent,

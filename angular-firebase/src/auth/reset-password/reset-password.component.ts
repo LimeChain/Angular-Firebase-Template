@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -19,6 +20,7 @@ export class ResetPasswordComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private readonly fb: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.resetPasswordForm = this.fb.group({
       newPassword: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(30)])],
@@ -34,9 +36,13 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
   async resetPasswordButton() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.notificationService.error('New Password and Confirm Password do not match');
+      return;
+    }
     const email = await this.authService.verifyPasswordResetCode(this.actionCode);
     await this.authService.resetPassword(this.newPassword, this.confirmPassword, this.actionCode, email);
-    alert('Your password was changed !');
+    this.notificationService.success('Your password was changed !');
     this.router.navigate(['/signin']);
     }
 }

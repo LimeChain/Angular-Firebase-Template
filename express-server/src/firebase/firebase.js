@@ -14,8 +14,10 @@ class FirebaseOperations {
         return await firebase.firestore().collection(`${collection}`).doc(`${doc}`).get();
     }
 
-    static create(collection, doc, dto) {
+    static async create(collection, doc, dto) {
         firebase.firestore().collection(`${collection}`).doc(`${doc}`).set(dto);
+        const user = (await firebase.firestore().collection('users').doc(`${doc}`).get()).data();
+        return user;
     }
 
     static update(collection, doc, dto) {
